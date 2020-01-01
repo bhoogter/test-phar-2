@@ -1,0 +1,25 @@
+language: php
+branches:
+  only:
+    - master
+    - /^.*[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+.*$/
+
+php:
+  - '7.2'
+script: phpunit --bootstrap src/autoload.php --test-suffix '-test.php,Test.php,.phpt' tests
+notifications:
+  email: false
+
+before_deploy:
+  - composer phar:install-tools
+  - composer install --prefer-dist --no-dev --no-interaction
+  - php box.phar build
+deploy:
+  - provider: releases
+    skip_cleanup: true
+    file: test-phar-1.phar
+    api_key:
+      secure: "iJruIL0YN32Ok1ArMgMBf9rtm+zMuH6MTDzYX6HaQErpM0vi63tqEu/ESIsiby6Cn/uivDlGAVxWyfUY5OpxITSAd4IqoA0kZ4cCibsPyPwmk88adrmxk6zyMj6iQITqqGB+SdRPAIzDY9rH0uUSvxRORSjz1X7s9oFucyK+oXsf36EPAdb3pcInjmUt7phK/eOBYHF9W70e8SJy13Y7gCgjaoyJLTT763tBIMMG62zqNezleiXr4S+tNu6nOOL9/fNDITOr8bYP03aT3FcqH0zfS8HybRKR2udhNDe8Z8UHz2rRJVcq/f1IHhcyUTVCgW2W8XB4O9bx6T1tjxYcTBU9RgoB89fLCKfgD2RJrCRdZcF1RYO4oVmsqa9xItKgV2riX8kw0gVACkvElkGVED33gLoIXltFkEygT5Uc2YNZLCM0KtVUlwF+i03/gGYsUxnL6dEbDJyzKdkXPmcXqa74eB9GA9Q+59yalFnzifmnIRNmIeV44n6nHOcqvG3Gtz+TUgUM/4R3+VJL5GOvn1Fc9HxlyzSUY6tsHaOcKGJc4GKzdz5npQqyREhrUm8nxGEtBB/K7UoGLLloATZ9tyGKNyH6Yj52YasiJscAzY+aQLVpRtWu/gWSfqw02MfMWZZ75FbGaLyIKEVuPWTLTgG84BQD+MAhf1PcXu6bf64="
+    on:
+      repo: bhoogter/test-phar-1
+      tags: true
