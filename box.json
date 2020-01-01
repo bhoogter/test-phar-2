@@ -5,5 +5,5 @@
     "LICENSE"
   ],
   "directories": ["src"],
-  "output": "test-phar-1.phar"
+  "output": "test-phar-2.phar"
 }
